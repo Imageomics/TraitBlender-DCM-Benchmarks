@@ -1,0 +1,10 @@
+# Slurm / local run artifacts (not part of the published recipe)
+logs/
+*.out
+*.err
+
+# Site-specific Slurm (accounts, paths, conda) — do not publish
+scripts/slurm/local/
+
+# Generated per-sim TraitBlender job YAMLs (absolute paths; rebuild with make_jobs.sh)
+configs/traitblender/jobs/

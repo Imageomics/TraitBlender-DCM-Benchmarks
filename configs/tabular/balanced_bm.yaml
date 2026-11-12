@@ -1,0 +1,37 @@
+# Balanced tree + BM over a sig2 grid (10 levels × 10 reps = 100 sims).
+id: balanced_bm
+process: bm
+# Single RNG seed for the whole scenario (shared tree + all sims).
+seed: 5678
+
+tree:
+  type: balanced   # ape::stree type
+  n_tips: 128
+  tip_prefix: t
+  height: 1.0
+  # Shared untransformed topology: $DATA_ROOT/trees/<shared_name>
+  shared_name: balanced_128.nwk
+
+traits:
+  n_traits: 5
+  # Tip Var = sig2 on height-1 trees. Log-spaced: little variation → MorphoWeave
+  # PC scale ~2.5 (higher tip SD starts looking unrealistic in meshes).
+  sig2:
+    id_prefix: sig2_
+    values:
+      - 0.01000000   # tip SD = 0.10
+      - 0.01846876
+      - 0.03410952
+      - 0.06299605
+      - 0.11634591
+      - 0.21487649
+      - 0.39685026
+      - 0.73293330
+      - 1.35363704
+      - 2.50000000   # tip SD ≈ 1.58
+
+
+reps:
+  # Trial: 1 rep per sig2 level (10 sims). Bump to 10 for the full release.
+  n_rep: 1
+  id_prefix: rep_

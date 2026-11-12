@@ -1,0 +1,45 @@
+# Balanced tree + Mk regimes + OU; alpha grid × reps (100 sims).
+id: balanced_ou
+process: ou
+# Single RNG seed for the whole scenario (shared tree + all sims).
+seed: 5678
+
+tree:
+  type: balanced
+  n_tips: 128
+  tip_prefix: t
+  height: 1.0
+  shared_name: balanced_128.nwk
+
+traits:
+  n_traits: 5
+  sig2: 2.5
+
+reps:
+  # Trial: 1 rep per alpha level (10 sims). Bump to 10 for the full release.
+  n_rep: 1
+  id_prefix: rep_
+
+ou:
+  # Half-lives log-spaced 2 → 0.02 (BM-like → tip clusters); alpha = ln(2) / t1/2.
+  # Dwell τ ≈ 0.2 at q=2.5; grid straddles τ and tree height T=1.
+  alpha:
+    id_prefix: alpha_
+    values:
+      - 0.34657359   # t1/2 = 2.000
+      - 0.57811959   # t1/2 ≈ 1.199
+      - 0.96436160   # t1/2 ≈ 0.719
+      - 1.60865211   # t1/2 ≈ 0.431
+      - 2.68339344   # t1/2 ≈ 0.258
+      - 4.47617004   # t1/2 ≈ 0.155
+      - 7.46670166   # t1/2 ≈ 0.093
+      - 12.45520904  # t1/2 ≈ 0.056
+      - 20.77654089  # t1/2 ≈ 0.033
+      - 34.65735903  # t1/2 = 0.020
+  # Equilateral triangle embedded in a random plane of trait space
+  # (vertex distance from origin = theta_scale; plane drawn via seed)
+  theta_scale: 2.5
+  states: [A, B, C]
+  # Equal-rate Mk (3 states): off-diagonal q to each other state.
+  # Fixed for all OU sims: E[switches] along a tip path ≈ 2q ≈ 5; dwell ≈ 1/(2q) ≈ 0.2.
+  q: 2.5

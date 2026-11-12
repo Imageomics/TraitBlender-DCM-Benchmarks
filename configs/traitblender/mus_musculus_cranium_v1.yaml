@@ -1,0 +1,141 @@
+---
+# TraitBlender MorphoWeave template — mouse cranium.
+# Placeholders filled by make_jobs.sh: {csv} {render_dir} {ssm_dir}
+morphospace:
+  name: MorphoWeave
+  hyperparams:
+    database_dir: "{ssm_dir}"
+    n_components: 5
+    scale: 0.5
+dataset:
+  filepath: "{csv}"
+world:
+  color: [0.0, 0.0, 0.0, 0.0]
+  strength: 1.0
+camera:
+  aspect_x: 1.0
+  aspect_y: 1.0
+  camera_type: PERSP
+  focal_length: 60.0
+  lens_unit: MILLIMETERS
+  location: [0.0, 0.0, 1.1]
+  resolution_percentage: 100
+  resolution_x: 350
+  resolution_y: 350
+  rotation: [0.0, 0.0, 0.0]
+  shift_x: 0.0
+  shift_y: 0.0
+lamp:
+  beam_blend: 0.0
+  beam_size: 1.0
+  color: [1.0, 1.0, 1.0]
+  diffuse: 1.0
+  location: [0.0, 0.0, 1.0]
+  power: 10.0
+  rotation: [0.0, 0.0, 0.0]
+  scale: [1.0, 1.0, 1.0]
+  shadow: true
+  use_soft_falloff: true
+mat:
+  color: [0.0, 0.0, 0.0, 1.0]
+  roughness: 1.0
+  scale: [0.15, 0.15, 1.0]
+  tb_location: [0.0, 0.0, 0.0]
+  tb_rotation: [0.0, 0.0, 0.0]
+render:
+  engine: CYCLES
+  cycles:
+    use_adaptive_sampling: true
+    adaptive_threshold: 0.01
+    samples: 128
+    adaptive_min_samples: 0
+    time_limit: 0.0
+    use_denoising: true
+    use_preview_adaptive_sampling: true
+    preview_adaptive_threshold: 0.1
+    preview_samples: 128
+    preview_adaptive_min_samples: 0
+    use_preview_denoising: false
+output:
+  image_format: PNG
+  images_per_view: 1
+  rendering_directory: "{render_dir}"
+  output_type: image
+imaging:
+  include_images: true
+  orientation_names:
+    - "Default"
+    - "Y 1 π Rotation"
+    - "X 3/2 π Rotation"
+  custom_orientations: {}
+  images_per_orientation: 5
+meshes:
+  save_meshes: true
+  file_export_type: ply
+  orient_before_export: true
+ruler:
+  hide: true
+  tb_location: [0.0, -0.1, 0.0]
+  tb_rotation: [0.0, 0.0, 0.0]
+metadata:
+  stamp_note_text: ""
+  use_stamp_camera: true
+  use_stamp_date: true
+  use_stamp_filename: true
+  use_stamp_frame: true
+  use_stamp_frame_range: false
+  use_stamp_hostname: false
+  use_stamp_lens: false
+  use_stamp_marker: false
+  use_stamp_memory: false
+  use_stamp_note: false
+  use_stamp_render_time: true
+  use_stamp_scene: true
+  use_stamp_sequencer_strip: false
+  use_stamp_time: true
+transforms:
+  - property_path: world.color.r
+    sampler_name: normal
+    params:
+      mu: 0.5
+      sigma: 0.05
+  - property_path: world.color.g
+    sampler_name: normal
+    params:
+      mu: 0.5
+      sigma: 0.05
+  - property_path: world.color.a
+    sampler_name: normal
+    params:
+      mu: 0.5
+      sigma: 0.05
+  - property_path: sample.tb_location.x
+    sampler_name: normal
+    params:
+      mu: 0.0
+      sigma: 0.001
+  - property_path: sample.tb_location.y
+    sampler_name: normal
+    params:
+      mu: 0.0
+      sigma: 0.001
+  - property_path: sample.tb_rotation.x
+    sampler_name: normal
+    params:
+      mu: 0.0
+      sigma: 0.01
+  - property_path: sample.tb_rotation.y
+    sampler_name: normal
+    params:
+      mu: 0.0
+      sigma: 0.01
+  - property_path: sample.tb_rotation.z
+    sampler_name: normal
+    params:
+      mu: 0.0
+      sigma: 0.01
+  - property_path: lamp.power
+    sampler_name: normal
+    params:
+      mu: 10.0
+      sigma: 1.0

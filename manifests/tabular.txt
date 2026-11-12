@@ -1,0 +1,6 @@
+# Tabular (phylo trees + tip traits) configs — paths relative to CODE_ROOT.
+# Used by scripts/slurm/run_tabular_sims.slurm array tasks.
+# Blank lines and # comments are ignored.
+configs/tabular/balanced_bm.yaml
+configs/tabular/balanced_ou.yaml
+configs/tabular/pagel_lambda_bm.yaml

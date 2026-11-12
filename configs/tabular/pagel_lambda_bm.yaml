@@ -1,0 +1,27 @@
+# Pagel's λ grid × BM; 10 reps per λ (100 sims).
+id: pagel_lambda_bm
+process: pagel_lambda_bm
+# Single RNG seed for the whole scenario (shared tree + all sims).
+seed: 5678
+
+tree:
+  type: balanced
+  n_tips: 128
+  tip_prefix: t
+  height: 1.0
+  shared_name: balanced_128.nwk
+
+traits:
+  n_traits: 5
+  sig2: 2.5
+
+reps:
+  # Trial: 1 rep per λ level (10 sims). Bump to 10 for the full release.
+  n_rep: 1
+  id_prefix: rep_
+
+# One transformed tree per λ level is written for visualization;
+# trait tables are lambda_XX__rep_YY.csv.
+lambda:
+  id_prefix: lambda_
+  values: [0.0, 0.11111111, 0.22222222, 0.33333333, 0.44444444, 0.55555556, 0.66666667, 0.77777778, 0.88888889, 1.0]
