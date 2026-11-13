@@ -150,7 +150,7 @@ If you use this software, please cite it (see also the â€œCite this repositoryâ€
 
 ```bibtex
 @software{charpentier_2026_traitblender,
-  author = {Charpentier, Caleb and Linscott, T. Mason and Bradley, John and Campolongo, Elizabeth and Thompson, Matthew and Uyeda, Josef C.},
+  author = {Charpentier, Caleb and Linscott, T. Mason and Bradley, John and Campolongo, Elizabeth and Thompson, Matthew and Porto, Arthur and Uyeda, Josef C.},
   title = {TraitBlender},
   year = {2026},
   publisher = {Zenodo},
