@@ -1,4 +1,5 @@
-# Pagel's λ grid × BM; 10 reps per λ (100 sims).
+# Pagel's λ grid × BM at fixed sig2; λ levels × n_rep.
+# HF imaging release uses n_rep: 1. Trees: one λ-transformed .nwk per level.
 id: pagel_lambda_bm
 process: pagel_lambda_bm
 # Single RNG seed for the whole scenario (shared tree + all sims).
@@ -16,7 +17,7 @@ traits:
   sig2: 2.5
 
 reps:
-  # Trial: 1 rep per λ level (10 sims). Bump to 10 for the full release.
+  # HF release: 1 rep per level. Raise for a denser replicate grid.
   n_rep: 1
   id_prefix: rep_
 

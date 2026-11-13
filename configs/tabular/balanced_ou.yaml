@@ -1,4 +1,5 @@
-# Balanced tree + Mk regimes + OU; alpha grid × reps (100 sims).
+# Balanced tree + Mk regimes + OU; alpha grid × n_rep.
+# HF imaging release uses n_rep: 1. Diffusion sig2 fixed; alpha varies half-life.
 id: balanced_ou
 process: ou
 # Single RNG seed for the whole scenario (shared tree + all sims).
@@ -16,7 +17,7 @@ traits:
   sig2: 2.5
 
 reps:
-  # Trial: 1 rep per alpha level (10 sims). Bump to 10 for the full release.
+  # HF release: 1 rep per level. Raise for a denser replicate grid.
   n_rep: 1
   id_prefix: rep_
 
@@ -36,7 +37,7 @@ ou:
       - 12.45520904  # t1/2 ≈ 0.056
       - 20.77654089  # t1/2 ≈ 0.033
       - 34.65735903  # t1/2 = 0.020
-  # Equilateral triangle embedded in a random plane of trait space
+  # Equilateral triangle in a random 2D plane of trait space
   # (vertex distance from origin = theta_scale; plane drawn via seed)
   theta_scale: 2.5
   states: [A, B, C]

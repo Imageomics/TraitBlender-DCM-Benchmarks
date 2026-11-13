@@ -1,0 +1,12 @@
+# Conda environment for TraitBlender-DCM-Benchmarks tabular simulation.
+# Imaging also requires Blender 5.1+ with TraitBlender installed separately:
+#   https://github.com/Imageomics/TraitBlender
+name: tb-dcm-benchmarks
+channels:
+  - conda-forge
+dependencies:
+  - r-base>=4.3
+  - r-ape
+  - r-phytools
+  - r-geiger
+  - r-yaml

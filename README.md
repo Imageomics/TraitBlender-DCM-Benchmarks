@@ -9,7 +9,7 @@ Code to generate the [TraitBlender-DCM-Benchmarks](https://huggingface.co/datase
 1. [Overview](#overview)
 2. [Dataset](#dataset)
 3. [Repository layout](#repository-layout)
-4. [Setup](#setup)
+4. [Installation](#installation)
 5. [Running simulations](#running-simulations)
 6. [Running imaging](#running-imaging)
 7. [Citation](#citation)
@@ -22,15 +22,20 @@ This pipeline simulates tip PCs under known comparative processes on a shared ul
 
 ## Dataset
 
-Released data: [imageomics/TraitBlender-DCM-Benchmarks](https://huggingface.co/datasets/imageomics/TraitBlender-DCM-Benchmarks).
+Released data: [imageomics/TraitBlender-DCM-Benchmarks](https://huggingface.co/datasets/imageomics/TraitBlender-DCM-Benchmarks) (dataset card on the Hub).
 
-To regenerate or extend the release, set `DATA_ROOT` to a local data directory and `SSM_ROOT` to your MorphoWeave SSM libraries (see Setup). MorphoWeave SSMs are not redistributed with the Hub dataset.
+To regenerate or extend the release, set `DATA_ROOT` to a local data directory and `SSM_ROOT` to your MorphoWeave SSM libraries (see below). MorphoWeave SSMs are not redistributed with the Hub dataset.
+
+Related software: [TraitBlender](https://github.com/Imageomics/TraitBlender) ([docs](https://imageomics.github.io/TraitBlender/), [Zenodo](https://doi.org/10.5281/zenodo.14804133)).
 
 ## Repository layout
 
 ```text
 .
   README.md
+  CITATION.cff
+  LICENSE.md
+  environment.yml
   configs/
     tabular/              # balanced_bm / balanced_ou / pagel_lambda_bm
     traitblender/         # one MorphoWeave template YAML per morphospace
@@ -47,21 +52,20 @@ Job ids: `{tabular_id}__{template_id}__{sim}` (e.g. `balanced_bm__vertebra_3000_
 
 To add a morphospace, add `configs/traitblender/<id>.yaml` and include `<id>` in `TEMPLATES` when running `make_jobs.sh`.
 
-## Setup
+## Installation
 
 ```bash
+conda env create -f environment.yml
+conda activate tb-dcm-benchmarks
+
 export CODE_ROOT=/path/to/TraitBlender-DCM-Benchmarks
 export DATA_ROOT=/path/to/data
 export SSM_ROOT=/path/to/morphoweave_ssms
 ```
 
-Requirements:
+Software dependencies are pinned in [`environment.yml`](environment.yml) (R + `ape`, `phytools`, `geiger`, `yaml`). Imaging also requires **Blender 5.1+** with [TraitBlender](https://github.com/Imageomics/TraitBlender) installed.
 
-- R with `ape`, `phytools`, `geiger`, `yaml`
-- Blender **5.1+** with [TraitBlender](https://github.com/Imageomics/TraitBlender)
-- Site modules or binaries for headless rendering (edit `scripts/slurm/run_imaging.slurm` for your cluster)
-
-Each tabular YAML sets `seed:`. Pass Slurm account / partition / qos on the `sbatch` command line—do not hard-code them in the checked-in scripts.
+Each tabular YAML sets `seed:` for reproducibility. Pass Slurm account / partition / qos on the `sbatch` command line—do not hard-code them in the checked-in scripts. Edit `scripts/slurm/run_imaging.slurm` module loads for your cluster.
 
 ## Running simulations
 
@@ -117,7 +121,7 @@ sbatch --account=... --partition=... --qos=... --array=1-"$N" \
 
 ## Citation
 
-Please cite the dataset (and the forthcoming dataset paper when available). Cite [TraitBlender](https://github.com/Imageomics/TraitBlender) ([Zenodo](https://doi.org/10.5281/zenodo.14804133)) when using the imaging stack.
+If you use this software, please cite it (see also the “Cite this repository” button from [`CITATION.cff`](CITATION.cff)). Please also cite the dataset (and the forthcoming dataset paper when available), and [TraitBlender](https://github.com/Imageomics/TraitBlender) when using the imaging stack.
 
 **Data**
 
@@ -157,7 +161,7 @@ Please cite the dataset (and the forthcoming dataset paper when available). Cite
 
 ## License
 
-Code is [MIT](LICENSE). The Hugging Face dataset is [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). TraitBlender / MorphoWeave / Blender retain their own licenses.
+Code is [MIT](LICENSE.md). The Hugging Face dataset is [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). TraitBlender / MorphoWeave / Blender retain their own licenses.
 
 ## Acknowledgements
 

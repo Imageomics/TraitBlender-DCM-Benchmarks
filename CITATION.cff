@@ -1,0 +1,22 @@
+abstract: "Generation code for TraitBlender-DCM-Benchmarks: phylogenetic trait simulations (Brownian motion, Pagel's λ, regime OU), TraitBlender/MorphoWeave imaging configs, and Slurm drivers for the Hugging Face dataset release."
+authors:
+- family-names: "Charpentier"
+  given-names: "Caleb P."
+cff-version: 1.2.0
+date-released: "2026-11-12"
+keywords:
+  - imageomics
+  - phylogenetics
+  - morphology
+  - TraitBlender
+  - MorphoWeave
+  - simulated data
+  - Deep Comparative Methods
+  - benchmark
+license: MIT
+message: "If you use this software, please cite it using the metadata from this file, and cite the dataset (and paper when available) as described in the README."
+repository-code: "https://github.com/Imageomics/TraitBlender-DCM-Benchmarks"
+title: "TraitBlender-DCM-Benchmarks"
+version: "0.1.0"
+type: software
+url: "https://github.com/Imageomics/TraitBlender-DCM-Benchmarks"

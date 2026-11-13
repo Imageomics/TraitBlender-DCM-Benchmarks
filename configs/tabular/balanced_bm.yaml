@@ -1,4 +1,5 @@
-# Balanced tree + BM over a sig2 grid (10 levels × 10 reps = 100 sims).
+# Balanced tree + BM over a sig2 grid (10 levels × n_rep).
+# HF imaging release uses n_rep: 1 (10 sims → 30 morphospace renders with 3 templates).
 id: balanced_bm
 process: bm
 # Single RNG seed for the whole scenario (shared tree + all sims).
@@ -32,6 +33,6 @@ traits:
 
 
 reps:
-  # Trial: 1 rep per sig2 level (10 sims). Bump to 10 for the full release.
+  # HF release: 1 rep per level. Raise for a denser replicate grid.
   n_rep: 1
   id_prefix: rep_
