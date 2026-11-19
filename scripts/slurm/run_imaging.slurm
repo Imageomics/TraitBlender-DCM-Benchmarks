@@ -1,5 +1,5 @@
 #!/bin/bash
-# TraitBlender imaging — one job YAML per array task (CPU / software GL).
+# TraitBlender imaging — one job YAML per array task (CPU node + Xvfb).
 # Not for BioEncoder. Site accounts/paths via sbatch CLI or local/ wrapper.
 #
 #   export CODE_ROOT=...
@@ -37,11 +37,6 @@ OUT_DIR=$(grep -E '^\s*rendering_directory:' "$CONFIG" | head -1 \
   | sed -e 's/.*rendering_directory:[[:space:]]*//' -e 's/[\"'\'']//g')
 mkdir -p "$OUT_DIR"
 
-if [[ -f "$OUT_DIR/rendering_log.txt" ]]; then
-  echo "SKIP (has rendering_log.txt): $OUT_DIR"
-  exit 0
-fi
-
 export CONFIG
 cd "$CODE_ROOT"
 
@@ -49,19 +44,11 @@ echo "HOST=$(hostname) DATE=$(date -Is) TASK=${SLURM_ARRAY_TASK_ID}"
 echo "CONFIG=$CONFIG"
 echo "OUT_DIR=$OUT_DIR"
 
-# Site modules (Xvfb / Blender / Mesa) — override in local/ wrapper if needed.
+# Site modules (Xvfb / Blender) — override in local/ wrapper if needed.
 module reset
 module load Xvfb/21.1.14-GCCcore-13.3.0
 module load Blender/5.1.2-linux-x86_64-CUDA-12.8.0
-module load Mesa/24.1.3-GCCcore-13.3.0
 
-export LIBGL_ALWAYS_SOFTWARE="${LIBGL_ALWAYS_SOFTWARE:-1}"
-export GALLIUM_DRIVER="${GALLIUM_DRIVER:-llvmpipe}"
-export MESA_LOADER_DRIVER_OVERRIDE="${MESA_LOADER_DRIVER_OVERRIDE:-llvmpipe}"
-if [[ -n "${EBROOTMESA:-}" ]]; then
-  export LD_LIBRARY_PATH="${EBROOTMESA}/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-  export LIBGL_DRIVERS_PATH="${EBROOTMESA}/lib/dri${LIBGL_DRIVERS_PATH:+:$LIBGL_DRIVERS_PATH}"
-fi
 export OMP_NUM_THREADS="${SLURM_CPUS_PER_TASK:-16}"
 BLENDER_THREADS="${SLURM_CPUS_PER_TASK:-16}"
 

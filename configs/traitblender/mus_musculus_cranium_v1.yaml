@@ -72,7 +72,7 @@ imaging:
 meshes:
   save_meshes: true
   file_export_type: ply
-  orient_before_export: true
+  orient_before_export: false
 ruler:
   hide: true
   tb_location: [0.0, -0.1, 0.0]
@@ -104,7 +104,7 @@ transforms:
     params:
       mu: 0.5
       sigma: 0.05
-  - property_path: world.color.a
+  - property_path: world.color.b
     sampler_name: normal
     params:
       mu: 0.5
