@@ -89,8 +89,7 @@ Configs use **10 parameter levels** with `n_rep: 1` for the HF release. Outputs 
 ```text
 trees/balanced_128.nwk
 balanced_bm/
-  tabular/sig2_XX__rep_YY.csv
-  tabular_tips/
+  tabular/sig2_XX__rep_YY.csv   # tips + internal nodes (pc1..pc5)
   trees/sig2_XX__rep_YY.nwk
   params.csv
   run_meta.yaml
@@ -110,14 +109,24 @@ pagel_lambda_bm/
 ```bash
 bash "$CODE_ROOT/scripts/imaging/make_jobs.sh"
 
-N=$(grep -cve '^\s*(#|$)' "$CODE_ROOT/manifests/imaging.txt")
-sbatch --account=... --partition=... --qos=... --array=1-"$N" \
-  --output="$CODE_ROOT/logs/%x_%A_%a.out" \
-  --error="$CODE_ROOT/logs/%x_%A_%a.err" \
-  "$CODE_ROOT/scripts/slurm/run_imaging.slurm"
+# One manifest per scenario (rebuilding one scenario does not touch the others):
+#   manifests/imaging_balanced_bm.txt
+#   manifests/imaging_balanced_ou.txt
+#   manifests/imaging_pagel_lambda_bm.txt
+# Later Shell (or other) scenarios get their own imaging_<scenario>.txt the same way.
+
+for scen in balanced_bm balanced_ou pagel_lambda_bm; do
+  export MANIFEST="$CODE_ROOT/manifests/imaging_${scen}.txt"
+  N=$(grep -cve '^\s*(#|$)' "$MANIFEST")
+  sbatch --export=ALL,CODE_ROOT,MANIFEST --account=... --partition=... --qos=... \
+    --array=1-"$N" \
+    --output="$CODE_ROOT/logs/%x_%A_%a.out" \
+    --error="$CODE_ROOT/logs/%x_%A_%a.err" \
+    "$CODE_ROOT/scripts/slurm/run_imaging.slurm"
+done
 ```
 
-`make_jobs.sh` writes tip-only CSVs under `$DATA_ROOT` and filled TraitBlender job YAMLs under `configs/traitblender/jobs/` (gitignored).
+`make_jobs.sh` points each job at the full `tabular/` CSV (tips and ancestors), writes TraitBlender job YAMLs under `configs/traitblender/jobs/` (gitignored), and rewrites only `manifests/imaging_<scenario>.txt` for each scenario in `SCENARIOS`.
 
 ## Citation
 
