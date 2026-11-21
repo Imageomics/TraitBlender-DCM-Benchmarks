@@ -40,7 +40,7 @@ Related software: [TraitBlender](https://github.com/Imageomics/TraitBlender) ([d
     tabular/              # balanced_bm / balanced_ou / pagel_lambda_bm
     traitblender/         # one MorphoWeave template YAML per morphospace
   scripts/
-    sim_traits/           # simulate_traits.R + helpers.R
+    sim_traits/           # MorphoWeave + shell BM sims (R / phytools)
     imaging/              # make_jobs.sh + Blender Python driver
     slurm/                # array job templates
   manifests/
@@ -127,6 +127,30 @@ done
 ```
 
 `make_jobs.sh` points each job at the full `tabular/` CSV (tips and ancestors), writes TraitBlender job YAMLs under `configs/traitblender/jobs/` (gitignored), and rewrites only `manifests/imaging_<scenario>.txt` for each scenario in `SCENARIOS`.
+
+## Shell BM (TraitBlender Shell morphospace)
+
+Separate from MorphoWeave: **25** paired replicates × **3** shell morphs (`shell_1trait` / `shell_3trait` / `shell_5trait`), tips **and** ancestors, **620²**, 3 views (`Default` / `Flipped` / `Aperture View`), 5 noise frames, PLY meshes (outer surface). Nested traits within a replicate (same `b` in all three; 3- and 5-trait also share `d,z`). Free-parameter bounds and fixed `S`/`t` are documented in the [dataset card](https://huggingface.co/datasets/imageomics/TraitBlender-DCM-Benchmarks) / `dataset/README.md`.
+
+Tabular sims: `scripts/sim_traits/simulate_shell_bounded_bm.R` (`ape` + `phytools::fastBM`). Slurm: `scripts/slurm/run_shell_sims.slurm`. One-shot submit (tabular only): `scripts/slurm/submit_shell_tabular.sh`. Template: `configs/traitblender/shell_default.yaml`. Job builder: `scripts/imaging/make_shell_jobs.sh` → `manifests/imaging_shell_bm.txt` (75 jobs). Same `scripts/slurm/run_imaging.slurm` driver as MorphoWeave. Submit helper (rebuilds jobs + optional notify mail): `scripts/slurm/submit_shell_imaging.sh`.
+
+```bash
+export CODE_ROOT=/home/calebc22/projects/TraitBlender-DCM-Benchmarks/code
+export DATA_ROOT=/home/calebc22/projects/TraitBlender-DCM-Benchmarks/dataset
+
+# 1) tabular CSVs only (25 reps × 3 morphs → dataset/shell_bm/tabular/…)
+bash "$CODE_ROOT/scripts/slurm/submit_shell_tabular.sh"
+
+# 2) after sims finish — imaging (separate step)
+bash "$CODE_ROOT/scripts/imaging/make_shell_jobs.sh"
+export MANIFEST="$CODE_ROOT/manifests/imaging_shell_bm.txt"
+N=$(grep -cve '^\s*(#|$)' "$MANIFEST")
+sbatch --export=ALL,CODE_ROOT,MANIFEST \
+  --account=imageomics-biosci --partition=normal_q --qos=tc_normal_base \
+  --array=1-"$N"%75 \
+  --output="$CODE_ROOT/logs/%x_%A_%a.out" --error="$CODE_ROOT/logs/%x_%A_%a.err" \
+  "$CODE_ROOT/scripts/slurm/run_imaging.slurm"
+```
 
 ## Citation
 

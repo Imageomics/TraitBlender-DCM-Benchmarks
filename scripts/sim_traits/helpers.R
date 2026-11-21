@@ -1,5 +1,4 @@
-# Shared helpers for simulate_traits.R
-# (trees, trait I/O, and BM / OU / λ runners).
+# Shared helpers for tabular sims (MorphoWeave + shell).
 # Source this file; do not run it alone.
 
 
@@ -22,12 +21,18 @@ make_tree <- function(cfg_tree) {
 }
 
 
+# Write a data frame as CSV, creating parent dirs as needed.
+write_trait_csv <- function(df, path) {
+  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
+  utils::write.csv(df, path, row.names = FALSE)
+}
+
+
 # Write tip + internal-node traits as CSV (species column + pc1..pcK).
 write_traits <- function(X, path) {
-  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
   colnames(X) <- paste0("pc", seq_len(ncol(X)))
   df <- data.frame(species = rownames(X), X, row.names = NULL)
-  utils::write.csv(df, path, row.names = FALSE)
+  write_trait_csv(df, path)
 }
 
 
@@ -48,8 +53,23 @@ param_grid <- function(block) {
 
 # Index of sim ids → parameter values (for later viz / imaging).
 write_params <- function(path, df) {
-  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
-  utils::write.csv(df, path, row.names = FALSE)
+  write_trait_csv(df, path)
+}
+
+
+# Reflecting BM on [lo, hi] via phytools::fastBM.
+# `sig2` is the unit-interval rate; we scale by (hi - lo)^2 so tip SD stays
+# ~sqrt(sig2) of the interval width on a height-1 tree.
+sim_bounded_bm <- function(phy, bounds, sig2, internal = TRUE) {
+  lo <- bounds[[1]]
+  hi <- bounds[[2]]
+  phytools::fastBM(
+    phy,
+    a = (lo + hi) / 2,
+    sig2 = sig2 * (hi - lo)^2,
+    bounds = bounds,
+    internal = internal
+  )
 }
 
 
